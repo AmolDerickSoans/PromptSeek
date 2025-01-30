@@ -102,7 +102,7 @@ export default function Header() {
                     <div className={`flex transition-all duration-300 ${
                         isMobile ? 'flex-col items-center' : 'items-center space-x-2'
                     } ${
-                        scrolled && !isMobile ? 'transform translate-x-[calc(50vw-250px)]' : ''
+                        scrolled && !isMobile ? 'transform translate-x-[calc(50vw-350px)]' : ''
                     }`}
                     onTransitionEnd={handleAnimationEnd}>
                         <div className={`transition-all duration-300 ${
@@ -131,7 +131,7 @@ export default function Header() {
                             <li>
                                 <Link href="/" className="relative group py-2 px-1">
                                     <span className="relative z-10 text-gray-600 group-hover:text-black transition-colors duration-200">
-                                        Home
+                                        Courses
                                     </span>
                                     <span className="absolute bottom-0 left-0 w-full h-0.5 bg-black transform scale-x-0 group-hover:scale-x-100 transition-transform duration-300 ease-out"></span>
                                 </Link>
@@ -140,6 +140,22 @@ export default function Header() {
                                 <Link href="/blogs" className="relative group py-2 px-1">
                                     <span className="relative z-10 text-gray-600 group-hover:text-black transition-colors duration-200">
                                         All Blogs
+                                    </span>
+                                    <span className="absolute bottom-0 left-0 w-full h-0.5 bg-black transform scale-x-0 group-hover:scale-x-100 transition-transform duration-300 ease-out"></span>
+                                </Link>
+                            </li>
+                            <li>
+                                <Link href="/" className="relative group py-2 px-1">
+                                    <span className="relative z-10 text-gray-600 group-hover:text-black transition-colors duration-200">
+                                        BootCamps
+                                    </span>
+                                    <span className="absolute bottom-0 left-0 w-full h-0.5 bg-black transform scale-x-0 group-hover:scale-x-100 transition-transform duration-300 ease-out"></span>
+                                </Link>
+                            </li>
+                            <li>
+                                <Link href="/" className="relative group py-2 px-1">
+                                    <span className="relative z-10 text-gray-600 group-hover:text-black transition-colors duration-200">
+                                        PromptSheet
                                     </span>
                                     <span className="absolute bottom-0 left-0 w-full h-0.5 bg-black transform scale-x-0 group-hover:scale-x-100 transition-transform duration-300 ease-out"></span>
                                 </Link>
@@ -255,7 +271,7 @@ export default function Header() {
                                 className="block py-2 text-base text-gray-600 hover:text-black border-b border-gray-100 transition-colors"
                                 onClick={() => setIsMenuOpen(false)}
                             >
-                                Home
+                                Courses
                             </Link>
                             <Link 
                                 href="/blogs" 
@@ -263,6 +279,20 @@ export default function Header() {
                                 onClick={() => setIsMenuOpen(false)}
                             >
                                 All Blogs
+                            </Link>
+                            <Link 
+                                href="/" 
+                                className="block py-2 text-base text-gray-600 hover:text-black border-b border-gray-100 transition-colors"
+                                onClick={() => setIsMenuOpen(false)}
+                            >
+                                BootCamps
+                            </Link>
+                            <Link 
+                                href="/" 
+                                className="block py-2 text-base text-gray-600 hover:text-black border-b border-gray-100 transition-colors"
+                                onClick={() => setIsMenuOpen(false)}
+                            >
+                                PromptSheet
                             </Link>
                             {user && (
                                 <>
