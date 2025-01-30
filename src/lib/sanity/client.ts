@@ -16,16 +16,3 @@ export function urlFor(source: any) {
 }
 
 // lib/queries.ts
-export const heroCarouselQuery = `
-  *[_type == "post" && featured == true] | order(publishedAt desc) {
-    _id,
-    title,
-    excerpt,
-    mainImage,
-    "slug": slug.current,
-    views,
-    readingTime,
-    publishedAt,
-    "tags": tags[]->title
-  }[0...5]
-`
