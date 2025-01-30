@@ -12,7 +12,7 @@ const blogs = [
     id: 1,
     title: "10 Essential DeepSeek Prompts for Developers",
     excerpt: "Boost your productivity with these powerful DeepSeek prompts.",
-    image: "/images/deepseek-prompts.jpg",
+    image: "/dummy/hero/lenscape.jpeg",
     tags: ["AI", "DeepSeek", "Productivity"],
     author: "Jane Doe",
     date: "May 15, 2023",

@@ -71,7 +71,7 @@ const blogPost = {
     Mastering these prompt engineering techniques will allow you to harness the full potential of DeepSeek. Remember to experiment and iterate on your prompts to achieve the best results.
   `,
   tags: ["AI", "DeepSeek", "Prompt Engineering"],
-  image: "/images/deepseek-hero.jpg",
+  image: "/dummy/hero/lenscape.jpeg",
 }
 
 export default function BlogPostPage() {
