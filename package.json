@@ -1,7 +1,9 @@
 {
   "name": "promptseek",
   "version": "0.1.0",
-  "author": {"name": "AmolDerickSoans"},
+  "author": {
+    "name": "AmolDerickSoans"
+  },
   "private": true,
   "scripts": {
     "dev": "next dev --turbopack",
@@ -10,12 +12,16 @@
     "lint": "next lint"
   },
   "dependencies": {
+    "@mux/mux-player-react": "^3.2.4",
     "@radix-ui/react-avatar": "^1.1.2",
     "@radix-ui/react-dialog": "^1.1.5",
     "@radix-ui/react-dropdown-menu": "^2.1.5",
     "@radix-ui/react-select": "^2.1.5",
     "@radix-ui/react-separator": "^1.1.1",
     "@radix-ui/react-slot": "^1.1.1",
+    "@sanity/block-content-to-react": "^3.0.0",
+    "@sanity/client": "^6.27.2",
+    "@sanity/image-url": "^1.1.0",
     "@supabase/auth-helpers-nextjs": "^0.10.0",
     "@supabase/auth-ui-react": "^0.4.7",
     "@supabase/auth-ui-shared": "^0.1.8",
@@ -25,6 +31,7 @@
     "framer-motion": "^12.0.6",
     "lucide-react": "^0.474.0",
     "next": "15.1.6",
+    "next-sanity": "^9.8.46",
     "react": "^19.0.0",
     "react-dom": "^19.0.0",
     "react-intersection-observer": "^9.15.1",
