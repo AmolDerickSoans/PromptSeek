@@ -1,7 +1,8 @@
 "use client"
 
 import { useState, useEffect } from "react"
-import { useInView } from "react-intersection-observer"
+import { ChevronDown, ListOrdered } from "lucide-react"
+import { Button } from "@/components/ui/button"
 
 interface TableOfContentsProps {
   content: string
@@ -10,7 +11,9 @@ interface TableOfContentsProps {
 export default function TableOfContents({ content }: TableOfContentsProps) {
   const [headings, setHeadings] = useState<{ id: string; text: string; level: number }[]>([])
   const [activeId, setActiveId] = useState<string>("")
+  const [isDrawerOpen, setIsDrawerOpen] = useState(false)
 
+  // Heading extraction logic
   useEffect(() => {
     const extractedHeadings =
       content.match(/^#{1,3}\s.+$/gm)?.map((heading) => {
@@ -23,6 +26,7 @@ export default function TableOfContents({ content }: TableOfContentsProps) {
     setHeadings(extractedHeadings)
   }, [content])
 
+  // Intersection Observer for active heading
   useEffect(() => {
     const observer = new IntersectionObserver(
       (entries) => {
@@ -32,7 +36,7 @@ export default function TableOfContents({ content }: TableOfContentsProps) {
           }
         })
       },
-      { rootMargin: "0px 0px -80% 0px" },
+      { rootMargin: "0px 0px -80% 0px" }
     )
 
     headings.forEach(({ id }) => {
@@ -44,21 +48,60 @@ export default function TableOfContents({ content }: TableOfContentsProps) {
   }, [headings])
 
   return (
-    <nav className="space-y-2">
-      <h3 className="font-semibold mb-2">Table of Contents</h3>
-      {headings.map(({ id, text, level }) => (
-        <a
-          key={id}
-          href={`#${id}`}
-          className={`block text-sm hover:text-primary transition-colors ${
-            activeId === id ? "text-primary font-semibold" : "text-gray-600"
-          }`}
-          style={{ marginLeft: `${(level - 1) * 12}px` }}
+    <>
+      {/* Mobile Drawer Trigger */}
+      <div className="md:hidden fixed bottom-0 left-0 right-0 z-50 bg-white shadow-lg">
+        <Button 
+          onClick={() => setIsDrawerOpen(!isDrawerOpen)}
+          className="w-full justify-between"
         >
-          {text}
-        </a>
-      ))}
-    </nav>
+          <ListOrdered className="mr-2" /> 
+          Table of Contents
+          <ChevronDown 
+            className={`transition-transform duration-300 ${
+              isDrawerOpen ? 'rotate-180' : ''
+            }`} 
+          />
+        </Button>
+      </div>
+
+      {/* Mobile Drawer */}
+      {isDrawerOpen && (
+        <div className="fixed inset-x-0 bottom-0 bg-white z-50 rounded-t-xl shadow-2xl p-4 max-h-[70vh] overflow-y-auto">
+          <nav className="space-y-2">
+            {headings.map(({ id, text, level }) => (
+              <a
+                key={id}
+                href={`#${id}`}
+                className={`block text-sm hover:text-primary transition-colors ${
+                  activeId === id ? "text-primary font-semibold" : "text-gray-600"
+                }`}
+                style={{ marginLeft: `${(level - 1) * 12}px` }}
+                onClick={() => setIsDrawerOpen(false)}
+              >
+                {text}
+              </a>
+            ))}
+          </nav>
+        </div>
+      )}
+
+      {/* Desktop Table of Contents */}
+      <nav className="hidden md:block space-y-2 sticky top-4">
+        <h3 className="font-semibold mb-2">Table of Contents</h3>
+        {headings.map(({ id, text, level }) => (
+          <a
+            key={id}
+            href={`#${id}`}
+            className={`block text-sm hover:text-primary transition-colors ${
+              activeId === id ? "text-primary font-semibold" : "text-gray-600"
+            }`}
+            style={{ marginLeft: `${(level - 1) * 12}px` }}
+          >
+            {text}
+          </a>
+        ))}
+      </nav>
+    </>
   )
 }
-
