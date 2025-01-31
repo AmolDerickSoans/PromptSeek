@@ -41,9 +41,9 @@ export const allBlogsQuery = `{
         ($readingTime == "10+" && readingTime > 10)
       ) &&
       ($dateRange == "" || 
-        ($dateRange == "last-week" && publishedAt > dateTime(now()) - 60*60*24*7) ||
-        ($dateRange == "last-month" && publishedAt > dateTime(now()) - 60*60*24*30) ||
-        ($dateRange == "last-year" && publishedAt > dateTime(now()) - 60*60*24*365)
+        ($dateRange == "last-week" && publishedAt >= dateTime(now()) - 60*60*24*7) &&
+        ($dateRange == "last-month" && publishedAt >= dateTime(now()) - 60*60*24*30) &&
+        ($dateRange == "last-year" && publishedAt >= dateTime(now()) - 60*60*24*365)
       )
     ] | order(publishedAt desc) {
       _id,
