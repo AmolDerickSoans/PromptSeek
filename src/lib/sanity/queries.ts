@@ -65,3 +65,140 @@ export const allBlogsQuery = `{
       "slug": slug.current
     }
   }`
+
+// export const blogContentQuery = `{
+//  "blogs": *[_type == "post" && slug.current == $slug][0] {
+//   _id,
+//   title,
+//   slug,
+//   author->{
+//     name,
+//     "slug": slug.current,
+//     image
+//   },
+//   mainImage{
+//     asset->{
+//       url,
+//       metadata
+//     }
+//   },
+//   tags[]->{
+//     title,
+//     "slug": slug.current
+//   },
+//   publishedAt,
+//   excerpt,
+//   body,
+//   readingTime,
+//   featured,
+//   views,
+//   sponsored,
+//   video,
+//   nextPost->{
+//     title,
+//     "slug": slug.current
+//   },
+//   section->{
+//     title,
+//     "slug": slug.current
+//   },
+//   huggingFaceEmbed{
+//     url,
+//     title,
+//     description
+//   },
+//   relatedPosts[]->{
+//     title,
+//     "slug": slug.current
+//   },
+//   sponsoredPriority,
+//   wordLinks[]{
+//     word,
+//     link->{
+//       title,
+//       "slug": slug.current
+//     }
+//   }
+// }
+// }`
+
+export const blogContentQuery = `*[_type == "post" && slug.current == $slug][0] {
+    title,
+    slug,
+    publishedAt,
+    excerpt,
+    readingTime,
+    views,
+    featured,
+    sponsored,
+    mainImage {
+      asset-> {
+        url,
+        metadata {
+          dimensions
+        }
+      }
+    },
+    "author": author-> {
+      name,
+      slug,
+      bio,
+      image {
+        asset-> {
+          url
+        }
+      },
+      social,
+      expertise
+    },
+    "tags": tags[]-> {
+      title,
+      slug,
+      description
+    },
+    "section": section-> {
+      title,
+      slug,
+      "parent": parent-> {
+        title,
+        slug
+      }
+    },
+    body,
+    "nextPost": nextPost-> {
+      title,
+      slug,
+      excerpt,
+      mainImage {
+        asset-> {
+          url
+        }
+      }
+    },
+    "relatedPosts": relatedPosts[]-> {
+      title,
+      slug,
+      excerpt,
+      publishedAt,
+      mainImage {
+        asset-> {
+          url
+        }
+      },
+      "author": author-> {
+        name
+      }
+    }
+  }`;
+
+  export const recentPostsQuery = `*[_type == "post"] | order(publishedAt desc)[0...5] {
+    title,
+    slug,
+    excerpt,
+    publishedAt,
+    mainImage {
+      asset-> {
+        url
+      }
+    }
+  }`;

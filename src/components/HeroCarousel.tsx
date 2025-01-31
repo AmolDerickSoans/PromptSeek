@@ -53,6 +53,7 @@ export default function HeroCarousel({ posts }: HeroCarouselProps) {
   }
 
   if (!posts.length) return null
+  console.log(posts)
 
   return (
     <div className="relative w-full h-[500px] mb-8 overflow-hidden rounded-lg">
@@ -81,9 +82,9 @@ export default function HeroCarousel({ posts }: HeroCarouselProps) {
               ))}
             </div>
             <h2 className="text-4xl font-bold text-white mb-2">{post.title}</h2>
-            <p className="text-xl text-white mb-4">{post.excerpt}</p>
+            <p className="text-xl text-white mb-4 hidden md:block">{post.excerpt}</p>
             <div className="flex items-center justify-between">
-              <Link href={`/blog/${post.slug}`}>
+              <Link href={`/blog/${posts[currentSlide].slug}`} onClick={()=> console.log('data' , post.slug)}>
                 <Button variant="default" size="lg">
                   Read Now
                 </Button>
