@@ -34,16 +34,17 @@ export const allBlogsQuery = `{
   
   export const filteredBlogsQuery = `{
     "blogs": *[_type == "post" && 
-      ($authorSlug == "" || author->slug.current == $authorSlug) &&
-      ($readingTime == "" || 
-        ($readingTime == "0-5" && readingTime <= 5) ||
-        ($readingTime == "5-10" && readingTime > 5 && readingTime <= 10) ||
-        ($readingTime == "10+" && readingTime > 10)
+      ($authorSlug == "all" || author->slug.current == $authorSlug) &&
+      ($readingTime == "all" || 
+        ($readingTime == "short" && readingTime < 5) ||
+        ($readingTime == "medium" && readingTime >= 5 && readingTime <= 15) ||
+        ($readingTime == "long" && readingTime > 15)
       ) &&
-      ($dateRange == "" || 
-        ($dateRange == "last-week" && publishedAt >= dateTime(now()) - 60*60*24*7) &&
-        ($dateRange == "last-month" && publishedAt >= dateTime(now()) - 60*60*24*30) &&
-        ($dateRange == "last-year" && publishedAt >= dateTime(now()) - 60*60*24*365)
+      ($dateRange == "all" || 
+        ($dateRange == "today" && publishedAt >= dateTime(now() - 1000 * 60 * 60 * 24)) ||
+        ($dateRange == "this-week" && publishedAt >= dateTime(now() - 1000 * 60 * 60 * 24 * 7)) ||
+        ($dateRange == "this-month" && publishedAt >= dateTime(now() - 1000 * 60 * 60 * 24 * 30)) ||
+        ($dateRange == "this-year" && publishedAt >= dateTime(now() - 1000 * 60 * 60 * 24 * 365))
       )
     ] | order(publishedAt desc) {
       _id,
@@ -58,5 +59,9 @@ export const allBlogsQuery = `{
       },
       publishedAt,
       readingTime
+    },
+    "authors": *[_type == "author"] {
+      name,
+      "slug": slug.current
     }
   }`
