@@ -2,12 +2,12 @@
 
 import { createClientComponentClient } from '@supabase/auth-helpers-nextjs'
 import { useRouter, useSearchParams } from 'next/navigation'
-import { useState, useEffect } from 'react'
+import { useState, useEffect, Suspense } from 'react'
 import { Button } from '@/components/ui/button'
 import { Input } from '@/components/ui/input'
 import { Alert, AlertDescription } from '@/components/ui/alert'
 
-export default function PasswordResetPage() {
+function PasswordResetForm() {
   const [password, setPassword] = useState('')
   const [confirmPassword, setConfirmPassword] = useState('')
   const [error, setError] = useState<string | null>(null)
@@ -107,5 +107,13 @@ export default function PasswordResetPage() {
         </Button>
       </form>
     </div>
+  )
+}
+
+export default function PasswordResetPage() {
+  return (
+    <Suspense fallback={<div>Loading...</div>}>
+      <PasswordResetForm />
+    </Suspense>
   )
 }

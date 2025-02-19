@@ -29,8 +29,8 @@ export default function BlogCard({ title, excerpt, image, tags, author, date, sl
         <h3 className="text-xl font-semibold mb-2 line-clamp-2">{title}</h3>
         <p className="text-gray-600 mb-2 line-clamp-2">{excerpt}</p>
         <div className="flex flex-wrap gap-2 mb-2">
-          {tags.map((tag) => (
-            <Badge key={tag} variant="secondary">
+          {tags.map((tag, index) => (
+            <Badge key={`${tag}-${index}`} variant="secondary">
               {tag}
             </Badge>
           ))}

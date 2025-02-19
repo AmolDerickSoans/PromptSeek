@@ -9,7 +9,7 @@ export interface Author {
     excerpt: string
     slug: string
     imageUrl: string
-    tags: string[]
+    tags: Array<{ _id: string; title: string }>
     author: Author
     publishedAt: string
     readingTime: number

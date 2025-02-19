@@ -1,20 +1,9 @@
 import BlogCard from "@/components/BlogCard"
 import { client } from "@/lib/sanity/client"
 import { allBlogsQuery } from "@/lib/sanity/queries"
+import { Blog } from "@/types/blog"
 
-interface Blog {
-  _id: string
-  title: string
-  excerpt: string
-  imageUrl: string
-  tags: string[]
-  author: {
-    name: string
-    slug: string
-  }
-  publishedAt: string
-}
-
+ 
 async function getBlogs() {
   const data = await client.fetch(allBlogsQuery)
   return data.blogs
@@ -40,7 +29,7 @@ export default async function BlogListing() {
           title={blog.title}
           excerpt={blog.excerpt}
           image={blog.imageUrl}
-          tags={blog.tags}
+          tags={blog.tags.map(tag => tag.title)}
           author={blog.author.name}
           date={formatDate(blog.publishedAt)}
           slug={blog.slug}

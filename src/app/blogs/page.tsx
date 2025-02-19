@@ -8,27 +8,28 @@ import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@
 import { Input } from "@/components/ui/input"
 import { client } from "@/lib/sanity/client"
 import { useDebounce } from "@/hooks/useDebounce"
+import { Blog } from "@/types/blog"
 
 // Updated interfaces based on Sanity schema
 interface Author {
   _id: string
   name: string
-  slug: { current: string }
+  slug: string
 }
 
-interface Blog {
-  _id: string
-  title: string
-  excerpt: string
-  slug: { current: string }
-  image: string
-  author: Author
-  publishedAt: string
-  readingTime: number
-  tags: Array<{ _id: string; title: string }>
-  featured: boolean
-  views: number
-}
+// interface Blog {
+//   _id: string
+//   title: string
+//   excerpt: string
+//   slug: string 
+//   imageUrl: string
+//   author: Author
+//   publishedAt: string
+//   readingTime: number
+//   tags: Array<{ _id: string; title: string }>
+//   featured: boolean
+//   views: number
+// }
 
 // Define filter options based on schema
 const DATE_FILTERS = [
@@ -215,7 +216,7 @@ export default function ViewAllBlogs() {
                 <SelectItem value="all">All Authors</SelectItem>
                 {authors.map((author) => (
                   <SelectItem key={author._id} value={author.slug}>
-                    {author.name}
+                    {author.slug}
                   </SelectItem>
                 ))}
               </SelectContent>
