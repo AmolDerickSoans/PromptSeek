@@ -1,7 +1,6 @@
 import { createClient } from '@sanity/client';
 import imageUrlBuilder from '@sanity/image-url';
 
-// Check if environment variables are defined
 const projectId = process.env.NEXT_PUBLIC_SANITY_PROJECT_ID;
 const dataset = process.env.NEXT_PUBLIC_SANITY_DATASET || 'production';
 
@@ -13,7 +12,7 @@ export const client = createClient({
   projectId,
   dataset,
   apiVersion: '2024-01-30',
-  useCdn: true,
+  useCdn: process.env.NODE_ENV === 'production', // Use CDN in production only
 });
 
 const builder = imageUrlBuilder(client);
