@@ -29,18 +29,19 @@ interface HeroCarouselProps {
 export default function HeroCarousel({ posts }: HeroCarouselProps) {
   const [currentSlide, setCurrentSlide] = useState(0)
   const [isAutoplay, setIsAutoplay] = useState(true)
-  if (!Array.isArray(posts) || posts.length === 0) {
-    return null
-  }
 
   useEffect(() => {
-    if (isAutoplay && posts.length > 1) {
+    if (isAutoplay && posts?.length > 1) {
       const interval = setInterval(() => {
         setCurrentSlide((prev) => (prev + 1) % posts.length)
       }, 5000)
       return () => clearInterval(interval)
     }
-  }, [isAutoplay, posts.length])
+  }, [isAutoplay, posts?.length])
+
+  if (!Array.isArray(posts) || posts.length === 0) {
+    return null
+  }
 
   const handlePrev = () => {
     setCurrentSlide((prev) => (prev - 1 + posts.length) % posts.length)
@@ -52,7 +53,6 @@ export default function HeroCarousel({ posts }: HeroCarouselProps) {
     setIsAutoplay(false)
   }
 
-  if (!posts.length) return null
   console.log(posts)
 
   return (

@@ -23,7 +23,7 @@ export default function Hero() {
           >
             <div className="bg-white/10 backdrop-blur-sm rounded-3xl p-6">
               <h2 className="text-xl md:text-2xl font-medium mb-4">
-                Tired of tools that don't deliver the results you need?
+                Tired of tools that don&#39;t deliver the results you need?
               </h2>
               <p className="text-gray-400">Move seamlessly between different LLMs to leverage their unique strengths</p>
             </div>

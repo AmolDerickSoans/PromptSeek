@@ -14,7 +14,8 @@ const eslintConfig = [
   {
     rules:{
       "@typescript-eslint/explicit-function-return-type": "warn",
-      " @typescript-eslint/no-explicit-any": "warn",o
+      "@typescript-eslint/no-explicit-any": "warn",
+      "@typescript-eslint/no-unused-vars": "warn",
     }
   }
 ];

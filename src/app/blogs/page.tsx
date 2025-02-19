@@ -260,9 +260,8 @@ export default function ViewAllBlogs() {
               <div className="space-y-4">
            
                 {currentBlogs.map((blog) => (
-                  <div>
+                  <div key={blog._id}>
                   <BlogCard
-                    key={blog._id}
                     title={blog.title}
                     excerpt={blog.excerpt}
                     image={blog.imageUrl}

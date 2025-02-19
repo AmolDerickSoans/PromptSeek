@@ -29,7 +29,7 @@ export default function LoginPage() {
         redirectTo={`${location.origin}/api/auth/callback`}
       />
       <p>
-        Don't have an account? <a href="/signup">Sign Up</a>
+        No account? <a href="/signup">Sign Up</a>
       </p>
     </div>
   );

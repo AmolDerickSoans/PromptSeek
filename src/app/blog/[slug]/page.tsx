@@ -90,7 +90,7 @@ export default function BlogPostPage() {
 
   const portableTextComponents = {
     types: {
-      image: ({ value }) => {
+      image: ({ value }: { value: { asset?: { url?: string }, alt?: string } }) => {
         const imageUrl = value?.asset?.url;
         if (!imageUrl) return null;
 
@@ -106,7 +106,7 @@ export default function BlogPostPage() {
           </div>
         );
       },
-      codeBlock: ({ value }) => (
+      codeBlock: ({ value }: { value: { filename: string; code: string } }) => (
         <div className="my-4">
           <p className="text-sm text-gray-500 mb-2">{value.filename}</p>
           <pre className="bg-gray-100 p-4 rounded-lg overflow-x-auto">
