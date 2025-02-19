@@ -168,10 +168,10 @@ export default function ViewAllBlogs() {
   }
 
   // Pagination logic
-  const BLOGS_PER_PAGE = 10
+  const BLOGS_PER_PAGE = 5 // Changed from 10 to 5 for default view
   const indexOfLastBlog = currentPage * BLOGS_PER_PAGE
   const indexOfFirstBlog = indexOfLastBlog - BLOGS_PER_PAGE
-  const currentBlogs = blogs.slice(indexOfFirstBlog, indexOfLastBlog)
+  const currentBlogs = blogs.slice(0, BLOGS_PER_PAGE) // Show first 5 blogs by default
   const pageCount = Math.ceil(blogs.length / BLOGS_PER_PAGE)
 
   return (
@@ -258,7 +258,9 @@ export default function ViewAllBlogs() {
           ) : (
             <>
               <div className="space-y-4">
+           
                 {currentBlogs.map((blog) => (
+                  <div>
                   <BlogCard
                     key={blog._id}
                     title={blog.title}
@@ -267,7 +269,9 @@ export default function ViewAllBlogs() {
                     tags={blog.tags.map(tag => tag.title)}
                     author={blog.author.name}
                     date={formatDate(blog.publishedAt)}
+                    slug={blog.slug}
                   />
+                  </div>
                 ))}
               </div>
               
