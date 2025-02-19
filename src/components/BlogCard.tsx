@@ -8,10 +8,13 @@ interface BlogCardProps {
   tags: string[]
   author: string
   date: string
+  slug: string
 }
 
-export default function BlogCard({ title, excerpt, image, tags, author, date }: BlogCardProps) {
-  return (
+import Link from "next/link"
+
+export default function BlogCard({ title, excerpt, image, tags, author, date, slug }: BlogCardProps) {
+  const CardContent = () => (
     <div className="flex items-start space-x-4 p-4 border rounded-lg shadow-sm hover:shadow-md transition-shadow">
       <div className="flex-shrink-0">
         <Image
@@ -37,6 +40,12 @@ export default function BlogCard({ title, excerpt, image, tags, author, date }: 
         </div>
       </div>
     </div>
+  )
+
+  return (
+    <Link href={`/blog/${slug}`}>
+      <CardContent />
+    </Link>
   )
 }
 

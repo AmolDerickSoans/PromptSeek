@@ -2,7 +2,8 @@ import HeroCarousel from "@/components/HeroCarousel"
 import QuickFilterTiles from "@/components/QuickFilterTiles"
 import SearchAndFilters from "@/components/SearchAndFilters"
 import BlogListing from "@/components/BlogListing"
-import { heroCarouselQuery , client} from "@/lib/sanity/client"
+import { heroCarouselQuery } from "@/lib/sanity/queries"
+import { client } from "@/lib/sanity/client"
 
 async function getHeroCarouselPosts() {
   return await client.fetch(heroCarouselQuery)

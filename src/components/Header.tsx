@@ -139,7 +139,7 @@ export default function Header() {
                             <li>
                                 <Link href="/blogs" className="relative group py-2 px-1">
                                     <span className="relative z-10 text-gray-600 group-hover:text-black transition-colors duration-200">
-                                        All Blogs
+                                        Blogs
                                     </span>
                                     <span className="absolute bottom-0 left-0 w-full h-0.5 bg-black transform scale-x-0 group-hover:scale-x-100 transition-transform duration-300 ease-out"></span>
                                 </Link>
@@ -153,9 +153,9 @@ export default function Header() {
                                 </Link>
                             </li>
                             <li>
-                                <Link href="/" className="relative group py-2 px-1">
+                                <Link href="/extension-landing" className="relative group py-2 px-1">
                                     <span className="relative z-10 text-gray-600 group-hover:text-black transition-colors duration-200">
-                                        PromptSheet
+                                        PromptSeer
                                     </span>
                                     <span className="absolute bottom-0 left-0 w-full h-0.5 bg-black transform scale-x-0 group-hover:scale-x-100 transition-transform duration-300 ease-out"></span>
                                 </Link>
@@ -278,7 +278,7 @@ export default function Header() {
                                 className="block py-2 text-base text-gray-600 hover:text-black border-b border-gray-100 transition-colors"
                                 onClick={() => setIsMenuOpen(false)}
                             >
-                                All Blogs
+                                Blogs
                             </Link>
                             <Link 
                                 href="/" 
@@ -288,11 +288,11 @@ export default function Header() {
                                 BootCamps
                             </Link>
                             <Link 
-                                href="/" 
+                                href="/extension-landing" 
                                 className="block py-2 text-base text-gray-600 hover:text-black border-b border-gray-100 transition-colors"
                                 onClick={() => setIsMenuOpen(false)}
                             >
-                                PromptSheet
+                                PromptSeer
                             </Link>
                             {user && (
                                 <>
