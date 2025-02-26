@@ -187,9 +187,9 @@ export default function Header() {
                         {!loading && !user && (
                             <Dialog>
                                 <DialogTrigger asChild>
-                                    <Button className="bg-black  dark:bg-black text-white hover:bg-gray-800 transition-colors shadow-lg hover:shadow-xl">
+                                    {/* <Button className="bg-black  dark:bg-black text-white hover:bg-gray-800 transition-colors shadow-lg hover:shadow-xl">
                                         Get Started
-                                    </Button>
+                                    </Button> */}
                                 </DialogTrigger>
                                 <DialogContent className="sm:max-w-[425px]">
                                     <Auth

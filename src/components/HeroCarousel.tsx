@@ -64,9 +64,7 @@ export default function HeroCarousel({ posts }: HeroCarouselProps) {
             index === currentSlide ? "opacity-100" : "opacity-0"
           }`}
           style={{
-            backgroundImage: `linear-gradient(rgba(0, 0, 0, 0.5), rgba(0, 0, 0, 0.5)), url(${
-              urlFor(post.mainImage).width(1920).url()
-            })`,
+            backgroundImage: `linear-gradient(rgba(0, 0, 0, 0.5), rgba(0, 0, 0, 0.5)), url(${urlFor(post.mainImage).width(1920).quality(90).auto('format').url()})`,
             backgroundSize: "cover",
             backgroundPosition: "center",
           }}

@@ -58,7 +58,11 @@ export default function CommentSection() {
     <div key={comment.id} className="mb-4">
       <div className="flex items-start space-x-4">
         <Avatar>
-          <AvatarImage src={`https://api.dicebear.com/6.x/initials/svg?seed=${comment.author}`} />
+          <AvatarImage 
+            src={`https://api.dicebear.com/6.x/initials/svg?seed=${comment.author}`} 
+            loading="lazy"
+            sizes="40px"
+          />
           <AvatarFallback>{comment.author[0]}</AvatarFallback>
         </Avatar>
         <div>
