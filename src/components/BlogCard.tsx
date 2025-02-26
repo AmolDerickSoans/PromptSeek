@@ -35,8 +35,18 @@ export default function BlogCard({ title, excerpt, image, tags, author, date, sl
             </Badge>
           ))}
         </div>
-        <div className="text-sm text-gray-500">
-          {author} • {date}
+        <div className="flex items-center justify-between mt-4">
+          <div className="flex items-center gap-2">
+            <span className="text-gray-600 text-sm">{date}</span>
+            <span className="text-gray-600">•</span>
+            <span className="text-gray-600 text-sm">{author}</span>
+          </div>
+          <div className="bg-gray-100 p-3 rounded-full transform transition-transform duration-300 hover:scale-110">
+            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className="text-gray-600">
+              <line x1="7" y1="17" x2="17" y2="7"></line>
+              <polyline points="7 7 17 7 17 17"></polyline>
+            </svg>
+          </div>
         </div>
       </div>
     </div>
