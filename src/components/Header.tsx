@@ -119,7 +119,7 @@ export default function Header() {
                         } ${isMobile ? 'text-[12px] pl-10 pt-2' : ''}
                         text-black dark:text-white
                         `}>
-                            Prompt Seek
+                            PROMPT SEEK
                         </Link>
                     </div>
 
@@ -127,37 +127,37 @@ export default function Header() {
                     <nav className={`hidden md:block transition-all duration-300 ${
                         scrolled ? 'absolute left-1/2 -translate-x-1/2' : 'absolute left-1/2 -translate-x-1/2'
                     }`}>
-                        <ul className="flex space-x-8 bg-white  dark:bg-black rounded-full px-6 py-2 shadow-lg">
+                        <ul className="flex space-x-8 bg-white/95 dark:bg-gray-900 rounded-full px-6 py-2 shadow-lg">
                             <li>
                                 <Link href="/" className="relative group py-2 px-1">
-                                    <span className="relative z-10 text-gray-600 group-hover:text-black transition-colors duration-200">
+                                    <span className="relative z-10 text-gray-600 dark:text-gray-300 group-hover:text-black dark:group-hover:text-white font-semibold transition-colors duration-200">
                                         Courses
                                     </span>
-                                    <span className="absolute bottom-0 left-0 w-full h-0.5 bg-black transform scale-x-0 group-hover:scale-x-100 transition-transform duration-300 ease-out"></span>
+                                    <span className="absolute bottom-0 left-0 w-full h-0.5 bg-green-500 transform scale-x-0 group-hover:scale-x-100 transition-transform duration-300 ease-out"></span>
                                 </Link>
                             </li>
                             <li>
                                 <Link href="/blogs" className="relative group py-2 px-1">
-                                    <span className="relative z-10 text-gray-600 group-hover:text-black transition-colors duration-200">
+                                    <span className="relative z-10 text-gray-600 dark:text-gray-300 group-hover:text-black dark:group-hover:text-white font-semibold transition-colors duration-200">
                                         Blogs
                                     </span>
-                                    <span className="absolute bottom-0 left-0 w-full h-0.5 bg-black transform scale-x-0 group-hover:scale-x-100 transition-transform duration-300 ease-out"></span>
+                                    <span className="absolute bottom-0 left-0 w-full h-0.5 bg-green-500 transform scale-x-0 group-hover:scale-x-100 transition-transform duration-300 ease-out"></span>
                                 </Link>
                             </li>
                             <li>
                                 <Link href="/" className="relative group py-2 px-1">
-                                    <span className="relative z-10 text-gray-600 group-hover:text-black transition-colors duration-200">
+                                    <span className="relative z-10 text-gray-600 dark:text-gray-300 group-hover:text-black dark:group-hover:text-white font-semibold transition-colors duration-200">
                                         BootCamps
                                     </span>
-                                    <span className="absolute bottom-0 left-0 w-full h-0.5 bg-black transform scale-x-0 group-hover:scale-x-100 transition-transform duration-300 ease-out"></span>
+                                    <span className="absolute bottom-0 left-0 w-full h-0.5 bg-green-500 transform scale-x-0 group-hover:scale-x-100 transition-transform duration-300 ease-out"></span>
                                 </Link>
                             </li>
                             <li>
                                 <Link href="/extension-landing" className="relative group py-2 px-1">
-                                    <span className="relative z-10 text-gray-600 group-hover:text-black transition-colors duration-200">
+                                    <span className="relative z-10 text-gray-600 dark:text-gray-300 group-hover:text-black dark:group-hover:text-white font-semibold transition-colors duration-200">
                                         PromptSeer
                                     </span>
-                                    <span className="absolute bottom-0 left-0 w-full h-0.5 bg-black transform scale-x-0 group-hover:scale-x-100 transition-transform duration-300 ease-out"></span>
+                                    <span className="absolute bottom-0 left-0 w-full h-0.5 bg-green-500 transform scale-x-0 group-hover:scale-x-100 transition-transform duration-300 ease-out"></span>
                                 </Link>
                             </li>
                         </ul>
