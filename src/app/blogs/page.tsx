@@ -2,8 +2,11 @@
 "use client"
 
 import { useState, useEffect } from "react"
+import Image from "next/image"
+import Link from "next/link"
 import BlogCard from "@/components/BlogCard"
 import { Button } from "@/components/ui/button"
+import { Badge } from "@/components/ui/badge"
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select"
 import { Input } from "@/components/ui/input"
 import { client } from "@/lib/sanity/client"
@@ -49,6 +52,7 @@ const READING_TIME_FILTERS = [
 
 export default function ViewAllBlogs() {
   const [blogs, setBlogs] = useState<Blog[]>([])
+  const [featuredBlogs, setFeaturedBlogs] = useState<Blog[]>([])
   const [authors, setAuthors] = useState<Author[]>([])
   const [currentPage, setCurrentPage] = useState(1)
   const [loading, setLoading] = useState(true)
@@ -175,8 +179,96 @@ export default function ViewAllBlogs() {
   const currentBlogs = blogs.slice(0, BLOGS_PER_PAGE) // Show first 5 blogs by default
   const pageCount = Math.ceil(blogs.length / BLOGS_PER_PAGE)
 
+  // Query for featured blogs
+  const buildFeaturedBlogsQuery = () => {
+    return `*[_type == "post" && featured == true] | order(publishedAt desc)[0...4] {
+      _id,
+      title,
+      excerpt,
+      "slug": slug.current,
+      "imageUrl": mainImage.asset->url,
+      "author": author->{
+        _id,
+        name,
+        "slug": slug.current
+      },
+      publishedAt,
+      readingTime,
+      "tags": tags[]->{ _id, title },
+      views,
+      featured
+    }`
+  }
+
+  useEffect(() => {
+    async function fetchFeaturedBlogs() {
+      try {
+        const query = buildFeaturedBlogsQuery()
+        const data = await client.fetch(query)
+        setFeaturedBlogs(data)
+      } catch (error) {
+        console.error("Error fetching featured blogs:", error)
+      }
+    }
+
+    fetchFeaturedBlogs()
+  }, [])
+
   return (
     <div className="container mx-auto px-4 py-8">
+      {/* Best of the Week Section */}
+      <section className="mb-16">
+        <div className="flex items-center justify-between mb-8">
+          <h2 className="text-5xl font-bold tracking-tight">Best of the week</h2>
+          <Link href="/blog" className="text-sm hover:underline">See all posts →</Link>
+        </div>
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+          {featuredBlogs.map((blog, index) => (
+            <Link href={`/blog/${blog.slug}`} key={blog._id} 
+              className={`relative overflow-hidden rounded-xl ${index === 0 ? 'md:col-span-2 md:row-span-2' : ''} 
+              group hover:shadow-lg transition-all duration-300 ease-in-out`}>
+              <div className="relative aspect-[16/9] w-full overflow-hidden rounded-xl">
+                <Image
+                  src={blog.imageUrl}
+                  alt={blog.title}
+                  fill
+                  className="object-cover transition-transform duration-300 group-hover:scale-105"
+                />
+                <div className="absolute inset-0 bg-gradient-to-t from-black/60 to-transparent">
+                  <div className="absolute bottom-0 p-6 w-full">
+                    <div className="flex gap-2 mb-2">
+                      {blog.tags.slice(0, 2).map(tag => (
+                        <Badge key={tag._id} variant="secondary" className="bg-white/10 text-white">
+                          {tag.title}
+                        </Badge>
+                      ))}
+                    </div>
+                    <h3 className="inline text-xl md:text-2xl font-bold mb-2">
+                      <span className="box-decoration-clone bg-secondary text-primary px-3 py-1 rounded-sm leading-[1.6]">
+                        {blog.title}
+                      </span>
+                    </h3>
+                    <div className="flex items-center justify-between mt-4">
+                      <div className="flex items-center gap-2">
+                        <span className="text-white/60 text-sm">{formatDate(blog.publishedAt)}</span>
+                        <span className="text-white/60">•</span>
+                        <span className="text-white/60 text-sm">{blog.readingTime} min read</span>
+                      </div>
+                      <div className="bg-white/10 p-3 rounded-full transform transition-transform duration-300 hover:scale-110">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className="text-white">
+                          <line x1="7" y1="17" x2="17" y2="7"></line>
+                          <polyline points="7 7 17 7 17 17"></polyline>
+                        </svg>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </Link>
+          ))}
+        </div>
+      </section>
+
       <h1 className="text-3xl font-bold mb-8">All Blogs</h1>
       <div className="flex flex-col md:flex-row gap-8">
         <aside className="w-full md:w-1/4 space-y-4">
