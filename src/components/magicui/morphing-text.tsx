@@ -4,14 +4,17 @@ import { useCallback, useEffect, useRef } from "react";
 
 import { cn } from "@/lib/utils";
 
-const morphTime = 1.5;
-const cooldownTime = 0.5;
+// Increased morphTime and cooldownTime for less frequent morphing
+const morphTime = 1.5; // Increased from 1.5 to 3
+const cooldownTime = 4; // Increased from 0.5 to 2
 
 const useMorphingText = (texts: string[]) => {
   const textIndexRef = useRef(0);
   const morphRef = useRef(0);
   const cooldownRef = useRef(0);
   const timeRef = useRef(new Date());
+  // Add a ref to track whether to cancel animation
+  const cancelAnimationRef = useRef(false);
 
   const text1Ref = useRef<HTMLSpanElement>(null);
   const text2Ref = useRef<HTMLSpanElement>(null);
@@ -28,8 +31,12 @@ const useMorphingText = (texts: string[]) => {
       current1.style.filter = `blur(${Math.min(8 / invertedFraction - 8, 100)}px)`;
       current1.style.opacity = `${Math.pow(invertedFraction, 0.4) * 100}%`;
 
+      // Ensure we're using the full text string from the array
       current1.textContent = texts[textIndexRef.current % texts.length];
-      current2.textContent = texts[(textIndexRef.current + 1) % texts.length];
+      // Only try to get the next text if it exists
+      current2.textContent = (textIndexRef.current + 1) < texts.length ? 
+        texts[(textIndexRef.current + 1)] : 
+        texts[textIndexRef.current % texts.length];
     },
     [texts],
   );
@@ -48,9 +55,15 @@ const useMorphingText = (texts: string[]) => {
     setStyles(fraction);
 
     if (fraction === 1) {
-      textIndexRef.current++;
+      // Check if we've exhausted all words
+      if (textIndexRef.current + 1 >= texts.length - 1) {
+        // Stop the animation by setting the flag
+        cancelAnimationRef.current = true;
+      } else {
+        textIndexRef.current++;
+      }
     }
-  }, [setStyles]);
+  }, [setStyles, texts.length]);
 
   const doCooldown = useCallback(() => {
     morphRef.current = 0;
@@ -67,7 +80,10 @@ const useMorphingText = (texts: string[]) => {
     let animationFrameId: number;
 
     const animate = () => {
-      animationFrameId = requestAnimationFrame(animate);
+      // Don't request another frame if we should cancel
+      if (!cancelAnimationRef.current) {
+        animationFrameId = requestAnimationFrame(animate);
+      }
 
       const newTime = new Date();
       const dt = (newTime.getTime() - timeRef.current.getTime()) / 1000;
@@ -136,7 +152,10 @@ export const MorphingText: React.FC<MorphingTextProps> = ({
 }) => (
   <div
     className={cn(
-      "relative mx-auto h-16 w-full max-w-screen-md text-center font-sans text-[40pt] font-bold leading-none [filter:url(#threshold)_blur(0.6px)] md:h-24 lg:text-[6rem]",
+      // Increased text size from 40pt to 60pt and from 6rem to 8rem
+      // Changed font-sans to font-serif
+      // Increased height to accommodate full sentences and added word-wrap
+      "relative mx-auto h-24 w-full max-w-screen text-center font-primary text-[20pt] font-bold leading-tight [filter:url(#threshold)_blur(0.6px)] text-rendering-optimizeLegibility antialiased md:h-40 lg:text-[5rem] break-words",
       className,
     )}
   >

@@ -11,23 +11,21 @@ async function getHeroCarouselPosts() {
 export default async function  Home() {
   const posts = await getHeroCarouselPosts()
   const texts = [
-    "Hello",
-    "Morphing",
-    "Text",
-    "Animation",
-    "React",
-    "Component",
-    "Smooth",
-    "Transition",
-    "Engaging",
+    "Learn Agentic AI",
+    "Master AI Agents",
+    "AI's Next Stage. Explained",
+    "Stay Ahead in AI",
+    "Your Agentic AI Guide",
   ];
   return (
+    <div>
+    <MorphingText texts={texts} />
     <div className="container mx-auto px-4">
-      <MorphingText texts={texts} />
        <HeroCarousel posts={posts} />
       <QuickFilterTiles />
       <SearchAndFilters />
       <BlogListing />
+    </div>
     </div>
   )
 }
