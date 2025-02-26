@@ -128,18 +128,27 @@ export default function BlogPostPage() {
 
   return (
     <div className={`min-h-screen ${isDarkMode ? "dark" : ""}`}>
-      <div className="container mx-auto px-4 py-8">
+      <div className="container mx-auto px-4 py-8 max-w-7xl">
         <div className="grid grid-cols-1 md:grid-cols-12 gap-8">
-          <main className="md:col-span-8">
-            <article className="prose lg:prose-xl dark:prose-invert mx-auto" 
-              style={{ fontSize: `${fontSize}px` }}>
+          <main className="md:col-span-8 lg:col-span-9">
+            <article className="prose lg:prose-xl dark:prose-invert font-sans antialiased [&>p]:mb-6 [&>p]:mt-2" 
+              style={{ fontSize: `${fontSize}px`, fontFamily: '"Inter", system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif' }}>
               <div ref={heroRef} className="relative h-96 mb-8">
                 <Image
                   src={getImageUrl(post.mainImage) || DEFAULT_PLACEHOLDER_IMAGE}
                   alt={post.title}
-                  layout="fill"
-                  objectFit="cover"
-                  className="rounded-lg"
+                  fill
+                  className="rounded-lg object-cover"
+                  priority
+                  loading="eager"
+                  sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
+                  unoptimized={true}
+                  loader={({ src }) => {
+                    // Add cache key to URL to enable browser caching
+                    const url = new URL(src);
+                    url.searchParams.set('cache', 'true');
+                    return url.toString();
+                  }}
                 />
                 <div className="absolute inset-0 bg-black bg-opacity-50 flex items-end p-8 rounded-lg">
                   <h1 className="text-4xl font-bold text-white mb-4">{post.title}</h1>
@@ -154,6 +163,8 @@ export default function BlogPostPage() {
                     width={40}
                     height={40}
                     className="rounded-full"
+                    loading="lazy"
+                    sizes="40px"
                   />
                   <div>
                     <p className="font-semibold">{post.author?.name}</p>
@@ -178,20 +189,21 @@ export default function BlogPostPage() {
             </article>
 
             {post.nextPost && (
-              <div className="mt-8">
-                <h3 className="text-2xl font-bold mb-4">Up Next</h3>
+              <div className="mt-8 bg-gray-50 dark:bg-gray-900 p-6 rounded-lg shadow-sm">
+                <h2 className="text-xl font-semibold mb-4">Up Next</h2>
                 <Link 
                   href={`/blog/${post.nextPost.slug.current}`} 
-                  className="block p-4 border rounded-lg hover:shadow-md transition-shadow"
+                  className="block hover:opacity-80 transition-opacity"
                 >
-                  <h4 className="text-xl font-semibold mb-2">{post.nextPost.title}</h4>
-                  <p className="text-gray-600">{post.nextPost.excerpt}</p>
+                  <h3 className="text-lg font-medium mb-2">{post.nextPost.title}</h3>
+                  <p className="text-sm text-gray-600 dark:text-gray-400">{post.nextPost.excerpt}</p>
                 </Link>
               </div>
             )}
           </main>
 
-          {/* Sidebar content remains the same */}
+          <aside className="md:col-span-4 lg:col-span-3 space-y-8 sticky top-24">
+          </aside>
         </div>
       </div>
 
