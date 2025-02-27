@@ -15,7 +15,7 @@ import { blogContentQuery, recentPostsQuery } from "@/lib/sanity/queries"
 import { PortableText } from "@portabletext/react"
 import { format } from "date-fns"
 import Head from "next/head"
-const Prism = require('prismjs');
+import Prism from 'prismjs'
 import 'prismjs/themes/prism-tomorrow.css'
 import 'prismjs/components/prism-javascript'
 import 'prismjs/components/prism-typescript'
@@ -269,7 +269,7 @@ export default function BlogPostPage() {
               </article>
 
               {post.nextPost && post.nextPost.slug && (
-                <div className="mt-8 bg-gray-50 dark:bg-gray-900 p-6 rounded-lg shadow-sm">
+                <div className="mt-8 bg-gray-50 dark:bg-zinc-900 p-6 rounded-lg shadow-sm">
                   <h2 className="text-xl font-semibold mb-4">Up Next</h2>
                   <Link 
                     href={`/blog/${post.nextPost.slug.current}`} 
