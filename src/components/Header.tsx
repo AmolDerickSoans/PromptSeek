@@ -112,7 +112,7 @@ export default function Header() {
                         } ${isMobile ? 'w-12 h-12' : ''}`}>
                             <Logo />
                         </div>
-                        <Link href="/" className={`text-xl md:text-2xl font-bold text-black hover:opacity-80 transition-all duration-100 ${
+                        <Link href="/" className={`text-xl md:text-l font-bold text-black hover:opacity-80 transition-all duration-100 ${
                             scrolled ? 'md:opacity-0 md:invisible md:w-0' : ''
                         } ${
                             !scrolled ? 'mt-1 md:mt-0' : ''
@@ -127,7 +127,7 @@ export default function Header() {
                     <nav className={`hidden md:block transition-all duration-300 ${
                         scrolled ? 'absolute left-1/2 -translate-x-1/2' : 'absolute left-1/2 -translate-x-1/2'
                     }`}>
-                        <ul className="flex space-x-8 bg-white/95 dark:bg-gray-900 rounded-full px-6 py-2 shadow-lg">
+                        <ul className="flex space-x-8 bg-white/95 dark:bg-zinc-900 rounded-full px-6 py-2 shadow-lg">
                             <li>
                                 <Link href="/" className="relative group py-2 px-1">
                                     <span className="relative z-10 text-gray-600 dark:text-gray-300 group-hover:text-black dark:group-hover:text-white font-semibold transition-colors duration-200">

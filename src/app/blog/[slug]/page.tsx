@@ -10,11 +10,20 @@ import { Button } from "@/components/ui/button"
 import { Badge } from "@/components/ui/badge"
 import { Separator } from "@/components/ui/separator"
 import TableOfContents from "@/components/TableOfContents"
-import { client } from "@/lib/sanity/client"
+import { client, urlFor } from "@/lib/sanity/client"
 import { blogContentQuery, recentPostsQuery } from "@/lib/sanity/queries"
 import { PortableText } from "@portabletext/react"
 import { format } from "date-fns"
 import Head from "next/head"
+import Prism from 'prismjs'
+import 'prismjs/themes/prism-tomorrow.css'
+import 'prismjs/components/prism-javascript'
+import 'prismjs/components/prism-typescript'
+import 'prismjs/components/prism-jsx'
+import 'prismjs/components/prism-tsx'
+import 'prismjs/components/prism-css'
+import 'prismjs/components/prism-json'
+import BlogSkeleton from "@/components/BlogSkeleton"
 
 // Default placeholder image URL - adjust the path as needed
 const DEFAULT_PLACEHOLDER_IMAGE = "/api/placeholder/800/600"
@@ -89,42 +98,78 @@ export default function BlogPostPage() {
     }
   }, [slug]);
 
+  // Initialize Prism.js after component mounts
+  useEffect(() => {
+    if (typeof window !== 'undefined') {
+      Prism.highlightAll();
+    }
+  }, [post]);
+
   const portableTextComponents = {
     types: {
-      image: ({ value }: { value: { asset?: { url?: string }, alt?: string } }) => {
-        const imageUrl = value?.asset?.url;
-        if (!imageUrl) return null;
+      image: ({ value }: { value: any }) => {
+        if (!value?.asset?._ref) return null;
 
         return (
           <div className="relative w-full h-96 my-8">
             <Image
-              src={imageUrl}
+              src={urlFor(value).url()}
               alt={value.alt || ""}
-              layout="fill"
-              objectFit="cover"
-              className="rounded-lg"
+              fill
+              className="rounded-lg object-cover"
+              priority
+              loading="eager"
+              sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
             />
           </div>
         );
       },
-      codeBlock: ({ value }: { value: { filename: string; code: string } }) => (
-        <div className="my-4">
-          <p className="text-sm text-gray-500 mb-2">{value.filename}</p>
-          <pre className="bg-gray-100 p-4 rounded-lg overflow-x-auto">
-            <code>{value.code}</code>
-          </pre>
-        </div>
-      ),
+
+      codeBlock: ({ value }: { value: { filename: string; code: string; language?: string } }) => {
+        interface CodeBlockProps {
+          filename: string;
+          code: string;
+          language?: string;
+        }
+
+        const CodeBlockComponent: React.FC<CodeBlockProps> = ({ filename, code, language }) => {
+          useEffect(() => {
+            if (typeof window !== 'undefined') {
+              Prism.highlightAll();
+            }
+          }, []);
+
+          return (
+            <div className="my-4">
+              {filename && (
+                <div className="flex justify-between items-center bg-gray-800 dark:bg-gray-900 px-4 py-2 rounded-t-lg">
+                  <p className="text-sm text-gray-300">{filename}</p>
+                </div>
+              )}
+              <pre className={`${isDarkMode ? 'dark:bg-gray-900' : 'bg-gray-100'} p-4 ${filename ? 'rounded-b-lg' : 'rounded-lg'} overflow-x-auto`}>
+                <code className={`language-${language || 'javascript'}`}>
+                  {code}
+                </code>
+              </pre>
+            </div>
+          );
+        };
+
+        return <CodeBlockComponent filename={value.filename} code={value.code} language={value.language} />;
+
+      },
     },
   };
 
   if (!post) {
-    return <div>Loading...</div>;
+    return <div>
+      <BlogSkeleton/>
+    </div>;
   }
 
-  // Helper function to get safe image URL
-  const getImageUrl = (imageObj?: { asset?: { url?: string } }) => {
-    return imageObj?.asset?.url || null;
+  // Helper function to get safe image URL using Sanity's urlFor
+  const getImageUrl = (imageObj?: any) => {
+    return imageObj ? urlFor(imageObj).url() : null;
   };
 
   return (
@@ -153,8 +198,7 @@ export default function BlogPostPage() {
         <div className="container mx-auto px-4 py-8 max-w-7xl">
           <div className="grid grid-cols-1 md:grid-cols-12 gap-8">
             <main className="md:col-span-8 lg:col-span-9">
-              <article className="prose lg:prose-xl dark:prose-invert font-sans antialiased [&>p]:mb-6 [&>p]:mt-2" 
-                style={{ fontSize: `${fontSize}px`, fontFamily: '"Inter", system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif' }}>
+              <article className="font-sans antialiased max-w-none text-gray-900 dark:text-gray-100">
                 <div ref={heroRef} className="relative h-96 mb-8">
                   <Image
                     src={getImageUrl(post.mainImage) || DEFAULT_PLACEHOLDER_IMAGE}
@@ -166,7 +210,6 @@ export default function BlogPostPage() {
                     sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
                     unoptimized={true}
                     loader={({ src }) => {
-                      // Add cache key to URL to enable browser caching
                       const url = new URL(src);
                       url.searchParams.set('cache', 'true');
                       return url.toString();
@@ -204,14 +247,42 @@ export default function BlogPostPage() {
                   </div>
                 </div>
 
-                <PortableText 
-                  value={post.body}
-                  components={portableTextComponents}
-                />
+                <div className="blog-content space-y-6">
+                  <PortableText 
+                    value={post.body}
+                    components={{
+                      ...portableTextComponents,
+                      block: {
+                        h1: ({children}) => <h1 className="text-4xl font-bold tracking-tight mb-4">{children}</h1>,
+                        h2: ({children}) => <h2 className="text-3xl font-bold tracking-tight mb-4">{children}</h2>,
+                        h3: ({children}) => <h3 className="text-2xl font-semibold mb-3">{children}</h3>,
+                        h4: ({children}) => <h4 className="text-xl font-semibold mb-3">{children}</h4>,
+                        h5: ({children}) => <h5 className="text-lg font-medium mb-2">{children}</h5>,
+                        h6: ({children}) => <h6 className="text-base font-medium mb-2">{children}</h6>,
+                        normal: ({children}) => <p className="text-base leading-relaxed mb-4">{children}</p>,
+                        blockquote: ({children}) => (
+                          <blockquote className="border-l-4 border-primary pl-4 italic my-4">{children}</blockquote>
+                        ),
+                      },
+                      marks: {
+                        link: ({children, value}) => (
+                          <a href={value.href} className="text-primary hover:underline">{children}</a>
+                        ),
+                        code: ({children}) => (
+                          <code className="bg-gray-100 dark:bg-gray-800 rounded px-1 py-0.5">{children}</code>
+                        ),
+                      },
+                      list: {
+                        bullet: ({children}) => <ul className="list-disc pl-6 mb-4 space-y-2">{children}</ul>,
+                        number: ({children}) => <ol className="list-decimal pl-6 mb-4 space-y-2">{children}</ol>,
+                      },
+                    }}
+                  />
+                </div>
               </article>
 
-              {post.nextPost && (
-                <div className="mt-8 bg-gray-50 dark:bg-gray-900 p-6 rounded-lg shadow-sm">
+              {post.nextPost && post.nextPost.slug && (
+                <div className="mt-8 bg-gray-50 dark:bg-zinc-900 p-6 rounded-lg shadow-sm">
                   <h2 className="text-xl font-semibold mb-4">Up Next</h2>
                   <Link 
                     href={`/blog/${post.nextPost.slug.current}`} 
