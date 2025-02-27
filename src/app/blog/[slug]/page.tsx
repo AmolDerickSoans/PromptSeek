@@ -15,6 +15,14 @@ import { blogContentQuery, recentPostsQuery } from "@/lib/sanity/queries"
 import { PortableText } from "@portabletext/react"
 import { format } from "date-fns"
 import Head from "next/head"
+const Prism = require('prismjs');
+import 'prismjs/themes/prism-tomorrow.css'
+import 'prismjs/components/prism-javascript'
+import 'prismjs/components/prism-typescript'
+import 'prismjs/components/prism-jsx'
+import 'prismjs/components/prism-tsx'
+import 'prismjs/components/prism-css'
+import 'prismjs/components/prism-json'
 
 // Default placeholder image URL - adjust the path as needed
 const DEFAULT_PLACEHOLDER_IMAGE = "/api/placeholder/800/600"
@@ -89,6 +97,13 @@ export default function BlogPostPage() {
     }
   }, [slug]);
 
+  // Initialize Prism.js after component mounts
+  useEffect(() => {
+    if (typeof window !== 'undefined') {
+      Prism.highlightAll();
+    }
+  }, [post]);
+
   const portableTextComponents = {
     types: {
       image: ({ value }: { value: { asset?: { url?: string }, alt?: string } }) => {
@@ -100,21 +115,49 @@ export default function BlogPostPage() {
             <Image
               src={imageUrl}
               alt={value.alt || ""}
-              layout="fill"
-              objectFit="cover"
-              className="rounded-lg"
+              fill
+              className="rounded-lg object-cover"
+              priority
+              loading="eager"
+              sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
             />
           </div>
         );
       },
-      codeBlock: ({ value }: { value: { filename: string; code: string } }) => (
-        <div className="my-4">
-          <p className="text-sm text-gray-500 mb-2">{value.filename}</p>
-          <pre className="bg-gray-100 p-4 rounded-lg overflow-x-auto">
-            <code>{value.code}</code>
-          </pre>
-        </div>
-      ),
+
+      codeBlock: ({ value }: { value: { filename: string; code: string; language?: string } }) => {
+        interface CodeBlockProps {
+          filename: string;
+          code: string;
+          language?: string;
+        }
+
+        const CodeBlockComponent: React.FC<CodeBlockProps> = ({ filename, code, language }) => {
+          useEffect(() => {
+            if (typeof window !== 'undefined') {
+              Prism.highlightAll();
+            }
+          }, []);
+
+          return (
+            <div className="my-4">
+              {filename && (
+                <div className="flex justify-between items-center bg-gray-800 dark:bg-gray-900 px-4 py-2 rounded-t-lg">
+                  <p className="text-sm text-gray-300">{filename}</p>
+                </div>
+              )}
+              <pre className={`${isDarkMode ? 'dark:bg-gray-900' : 'bg-gray-100'} p-4 ${filename ? 'rounded-b-lg' : 'rounded-lg'} overflow-x-auto`}>
+                <code className={`language-${language || 'javascript'}`}>
+                  {code}
+                </code>
+              </pre>
+            </div>
+          );
+        };
+
+        return <CodeBlockComponent filename={value.filename} code={value.code} language={value.language} />;
+
+      },
     },
   };
 
@@ -153,8 +196,23 @@ export default function BlogPostPage() {
         <div className="container mx-auto px-4 py-8 max-w-7xl">
           <div className="grid grid-cols-1 md:grid-cols-12 gap-8">
             <main className="md:col-span-8 lg:col-span-9">
-              <article className="prose lg:prose-xl dark:prose-invert font-sans antialiased [&>p]:mb-6 [&>p]:mt-2" 
-                style={{ fontSize: `${fontSize}px`, fontFamily: '"Inter", system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif' }}>
+              <article className="prose lg:prose-xl dark:prose-invert font-sans antialiased max-w-none
+                prose-headings:font-sans prose-headings:font-bold
+                prose-h1:text-4xl prose-h1:leading-tight
+                prose-h2:text-3xl prose-h2:leading-snug
+                prose-h3:text-2xl prose-h3:leading-snug
+                prose-h4:text-xl
+                prose-h5:text-lg
+                prose-h6:text-base
+                prose-p:text-base prose-p:leading-relaxed prose-p:mb-6 prose-p:mt-2
+                prose-a:text-primary prose-a:no-underline hover:prose-a:underline
+                prose-blockquote:border-l-4 prose-blockquote:border-primary
+                prose-code:text-primary prose-code:bg-gray-100 dark:prose-code:bg-gray-800 prose-code:rounded prose-code:px-1
+                prose-pre:bg-gray-100 dark:prose-pre:bg-gray-800
+                prose-img:rounded-lg prose-img:shadow-md
+                prose-ul:list-disc prose-ul:pl-4
+                prose-ol:list-decimal prose-ol:pl-4"
+                style={{ fontFamily: '"Inter", system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif' }}>
                 <div ref={heroRef} className="relative h-96 mb-8">
                   <Image
                     src={getImageUrl(post.mainImage) || DEFAULT_PLACEHOLDER_IMAGE}
@@ -210,7 +268,7 @@ export default function BlogPostPage() {
                 />
               </article>
 
-              {post.nextPost && (
+              {post.nextPost && post.nextPost.slug && (
                 <div className="mt-8 bg-gray-50 dark:bg-gray-900 p-6 rounded-lg shadow-sm">
                   <h2 className="text-xl font-semibold mb-4">Up Next</h2>
                   <Link 
